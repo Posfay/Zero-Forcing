@@ -11,7 +11,6 @@ def simulate_zero_forcing(gr):
 
     while True:
         blacks = 0
-        whites = 0
         for i in list(graph.nodes):                         # count black nodes
             if graph.nodes[i]['b'] == 1:
                 blacks += 1
