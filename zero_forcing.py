@@ -1,6 +1,59 @@
 import networkx as nx
 import matplotlib.pyplot as plt
 
+
+def simulate_zero_forcing(gr):
+
+    graph = gr.copy()
+    nodes = graph.number_of_nodes()
+    last_blacks = 0
+    steps = 0
+
+    while True:
+        blacks = 0
+        whites = 0
+        for i in list(graph.nodes):                         # count black nodes
+            if graph.nodes[i]['b'] == 1:
+                blacks += 1
+        whites = nodes - blacks
+        if (blacks < nodes) and (blacks > last_blacks):     # if one step does not create new black nodes -> end
+            last_blacks = blacks
+            steps += 1
+            graph = simulate_one_step(graph, whites, steps).copy()  # continue simulation
+        else:
+            if blacks < nodes:
+                print("Zero forcing failed")
+            else:
+                print("Zero forcing finished in " + str(steps) + " step(s)")
+            break
+
+
+def simulate_one_step(graph, white_nodes, step):
+
+    next_graph = graph.copy()
+    processed_whites = 0
+
+    for i in list(graph.nodes):                         # iterate over nodes in graph
+        if processed_whites == white_nodes:             # if all white nodes are processed -> nothing to do -> break
+            break
+        if graph.nodes[i]['b'] == 0:                    # if node is white
+            processed_whites += 1
+            for j in graph.neighbors(i):                # iterate over its neighbors
+                if graph.nodes[j]['b'] == 1:            # if node is black
+                    whites = 0
+                    for k in graph.neighbors(j):        # iterate over its neighbors
+                        if graph.nodes[k]['b'] == 0:    # find and count all white neighbors
+                            whites += 1
+                            if whites > 1:
+                                break
+                    if whites == 1:                     # if only one white neighbor
+                        next_graph.nodes[i]['b'] = 1    # original node becomes black
+                        break
+
+    print("Step " + str(step) + " - " + str(next_graph.nodes.data()))
+    return next_graph
+
+
 G = nx.Graph()
 
 G.add_node(0, b=0)
@@ -12,14 +65,7 @@ G.add_edge(0, 1)
 G.add_edge(1, 2)
 G.add_edge(2, 3)
 
-# print(G.nodes.data())
-# print(list(G.neighbors(0)))
-# print(G.nodes[0]['b'])
-# G2 = G.copy()
-# G2.nodes[0]['b'] = 0
-# print(G.nodes[0]['b'])
-# print(G2.nodes[0]['b'])
-
+simulate_zero_forcing(G)
 
 # options = {
 #     'node_color': 'black',
@@ -32,46 +78,3 @@ G.add_edge(2, 3)
 # # nx.draw_random(G, **options)
 # plt.show()
 
-
-def simulate_zero_forcing(gr):
-    graph = gr.copy()
-    nodes = graph.number_of_nodes()
-    last_blacks = 0
-    steps = 0
-    while True:
-        blacks = 0
-        for i in list(graph.nodes):
-            if graph.nodes[i]['b'] == 1:
-                blacks += 1
-        if (blacks < nodes) and (blacks > last_blacks):   # if one step does not create new black nodes -> end
-            last_blacks = blacks
-            steps += 1
-            graph = simulate_one_step(graph, steps).copy()
-        else:
-            if blacks < nodes:
-                print("Zero forcing failed")
-            else:
-                print("Zero forcing finished in " + str(steps) + " step(s)")
-            break
-
-
-def simulate_one_step(graph, step):
-    next_graph = graph.copy()
-    for i in list(graph.nodes):
-        if graph.nodes[i]['b'] == 0:
-            for j in graph.neighbors(i):
-                if graph.nodes[j]['b'] == 1:
-                    whites = 0
-                    for k in graph.neighbors(j):
-                        if graph.nodes[k]['b'] == 0:
-                            whites += 1
-                            if whites > 1:
-                                break
-                    if whites == 1:
-                        next_graph.nodes[i]['b'] = 1
-                        break
-    print("Step " + str(step) + " - " + str(next_graph.nodes.data()))
-    return next_graph
-
-
-simulate_zero_forcing(G)
