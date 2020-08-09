@@ -1,4 +1,3 @@
-import networkx as nx
 import matplotlib.pyplot as plt
 
 
@@ -8,17 +7,20 @@ def simulate_zero_forcing(gr):
     nodes = graph.number_of_nodes()
     last_blacks = 0
     steps = 0
+    blacks = 0
+
+    for i in list(graph.nodes):                                         # count initial black nodes
+        if graph.nodes[i]['b'] == 1:
+            blacks += 1
 
     while True:
-        blacks = 0
-        for i in list(graph.nodes):                         # count black nodes
-            if graph.nodes[i]['b'] == 1:
-                blacks += 1
         whites = nodes - blacks
-        if (blacks < nodes) and (blacks > last_blacks):     # if one step does not create new black nodes -> end
+        if (whites > 0) and (blacks > last_blacks):                     # if one step does not create new blacks -> end
             last_blacks = blacks
             steps += 1
-            graph = simulate_one_step(graph, whites, steps).copy()  # continue simulation
+            g, new_blacks = simulate_one_step(graph, whites, steps)     # continue simulation
+            graph = g.copy()
+            blacks += new_blacks
         else:
             if blacks < nodes:
                 print("Zero forcing failed")
@@ -31,6 +33,7 @@ def simulate_one_step(graph, white_nodes, step):
 
     next_graph = graph.copy()
     processed_whites = 0
+    new_blacks = 0
 
     for i in list(graph.nodes):                         # iterate over nodes in graph
         if processed_whites == white_nodes:             # if all white nodes are processed -> nothing to do -> break
@@ -47,24 +50,13 @@ def simulate_one_step(graph, white_nodes, step):
                                 break
                     if whites == 1:                     # if only one white neighbor
                         next_graph.nodes[i]['b'] = 1    # original node becomes black
+                        new_blacks += 1                 # count the new black nodes
                         break
 
     print("Step " + str(step) + " - " + str(next_graph.nodes.data()))
-    return next_graph
 
+    return next_graph, new_blacks
 
-G = nx.Graph()
-
-G.add_node(0, b=0)
-G.add_node(1, b=0)
-G.add_node(2, b=0)
-G.add_node(3, b=1)
-
-G.add_edge(0, 1)
-G.add_edge(1, 2)
-G.add_edge(2, 3)
-
-simulate_zero_forcing(G)
 
 # options = {
 #     'node_color': 'black',
