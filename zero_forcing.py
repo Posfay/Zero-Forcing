@@ -1,6 +1,3 @@
-import matplotlib.pyplot as plt
-
-
 def simulate_zero_forcing(gr):
 
     graph = gr.copy()
@@ -12,6 +9,7 @@ def simulate_zero_forcing(gr):
     for i in list(graph.nodes):                                         # count initial black nodes
         if graph.nodes[i]['b'] == 1:
             blacks += 1
+    initial_blacks = blacks
 
     while True:
         whites = nodes - blacks
@@ -23,10 +21,11 @@ def simulate_zero_forcing(gr):
             blacks += new_blacks
         else:
             if blacks < nodes:
-                print("Zero forcing failed")
+                # print("Zero forcing failed")
+                return initial_blacks, False
             else:
-                print("Zero forcing finished in " + str(steps) + " step(s)")
-            break
+                # print("Zero forcing finished in " + str(steps) + " step(s)")
+                return initial_blacks, True
 
 
 def simulate_one_step(graph, white_nodes, step):
@@ -53,19 +52,6 @@ def simulate_one_step(graph, white_nodes, step):
                         new_blacks += 1                 # count the new black nodes
                         break
 
-    print("Step " + str(step) + " - " + str(next_graph.nodes.data()))
+    # print("Step " + str(step) + " - " + str(next_graph.nodes.data()))
 
     return next_graph, new_blacks
-
-
-# options = {
-#     'node_color': 'black',
-#     'node_size': 100,
-#     'width': 3,
-# }
-#
-# plt.subplot(121)
-# nx.draw(G, with_labels=True, font_weight='bold')
-# # nx.draw_random(G, **options)
-# plt.show()
-
