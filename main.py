@@ -24,5 +24,5 @@ import zero_forcing_process as zf
 # graph_utils.draw_nx_graph(graph_utils.generate_3_regular_graph(20))
 
 
-graphs = zf.generate_graphs(14)
+graphs = zf.generate_graphs(16)
 zf.simulate_zero_forcing_on_graphs(graphs)
