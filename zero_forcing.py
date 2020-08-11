@@ -1,11 +1,26 @@
-def simulate_zero_forcing(gr):
+"""
+Add header docstring detailing what this module does.
+"""
 
+
+def simulate_zero_forcing(gr):
+    """
+    Add one liner docstring detailing the functionality. Also add input/
+	output types.
+
+	gr: Graph
+	-------
+	outout: list(Nodes), int
+    """
     graph = gr.copy()
     nodes = graph.number_of_nodes()
     last_blacks = 0
     steps = 0
     blacks = 0
 
+    # Adding explanatory comments is a good practice. Aim for keeping every
+	# line at most 80 characters long. Move your comments into preceeding
+	# lines.
     for i in list(graph.nodes):                                         # count initial black nodes
         if graph.nodes[i]['b'] == 1:
             blacks += 1
@@ -25,11 +40,21 @@ def simulate_zero_forcing(gr):
                 return initial_blacks, False
             else:
                 # print("Zero forcing finished in " + str(steps) + " step(s)")
+				# Instead of string concatenation consider using Python's
+				# string formatting functionality:
+                # print("Zero forcing finished in {} step(s)".format(steps))
+				# This will invoke str() on the input automatically. If you
+				# are using Python 3.8+ you can even use f-strings for more
+				# convenient display:
+                # print(f"Zero forcing finished in {steps} step(s)")
+
                 return initial_blacks, True
 
 
 def simulate_one_step(graph, white_nodes, step):
-
+    """
+    Add docstring, see my comment above.
+	"""
     next_graph = graph.copy()
     processed_whites = 0
     new_blacks = 0
