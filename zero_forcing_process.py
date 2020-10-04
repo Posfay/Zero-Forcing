@@ -10,7 +10,7 @@ Generate graphs and simulate zero forcing on them.
 
 def generate_graphs(n, seed=int(time.time())):
     """
-    Generate 1 graph with all possible initial black nodes set.
+    Generate 1 graph with all permutations of initial black nodes.
 
     :param n: int
     :param seed: int
@@ -21,8 +21,7 @@ def generate_graphs(n, seed=int(time.time())):
 
     # generate list of initial black nodes
     for i in range(2, int(n / 2) + 2):
-        subset_generating.process_subsets(list(range(0, n)), i)
-        subs = list(subset_generating.subsets)
+        subs = subset_generating.process_subsets(list(range(0, n)), i)
         initial_black_nodes_list.extend(subs)
 
     # generate the core graph
@@ -48,18 +47,18 @@ def simulate_zero_forcing_on_graphs(graphs):
     zero_forcing_number = 0
     nodes = graphs[0].number_of_nodes()
 
-    print("Graph structure: {list(graphs[0].adjacency())}")
+    print(f"Graph structure: {list(graphs[0].adjacency())}")
 
     for graph in graphs:
         g = graph.copy()
         initial_blacks, success = zero_forcing.simulate_zero_forcing(graph)
-        print("{success} - {initial_blacks} - {g.nodes.data()}")
+        print(f"{success} - {initial_blacks} - {g.nodes.data()}")
 
         if success and not found_zero_forcing_number:
             found_zero_forcing_number = True
             zero_forcing_number = initial_blacks
 
-    print("The zero forcing number of the graph with {nodes} nodes is "
-          "{zero_forcing_number}")
+    print(f"The zero forcing number of the graph with {nodes} nodes is " +
+          f"{zero_forcing_number}")
 
     return zero_forcing_number

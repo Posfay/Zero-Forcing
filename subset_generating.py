@@ -21,3 +21,4 @@ def process_subsets(my_set, k):
     subsets.clear()
     subset = list(range(k))
     process_larger_subsets(my_set, subset, 0, 0)
+    return list(subsets)
