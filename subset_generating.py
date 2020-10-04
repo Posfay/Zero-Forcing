@@ -1,3 +1,8 @@
+"""
+Generate subsets from a set recursively.
+"""
+
+
 subsets = list()
 
 

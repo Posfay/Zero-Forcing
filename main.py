@@ -25,4 +25,4 @@ import zero_forcing_process as zf
 
 
 graphs = zf.generate_graphs(16)
-zf.simulate_zero_forcing_on_graphs(graphs)
+zf_number = zf.simulate_zero_forcing_on_graphs(graphs)
