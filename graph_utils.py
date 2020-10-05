@@ -18,6 +18,7 @@ def generate_3_regular_graph(n, seed):
     graph = nx.random_regular_graph(3, n, seed)
     for i in list(graph.nodes):
         graph.nodes[i]['b'] = 0
+        graph.nodes[i]['r'] = 0
 
     return graph
 
