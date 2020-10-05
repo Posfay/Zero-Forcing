@@ -7,7 +7,9 @@ subsets = list()
 
 
 def process_larger_subsets(my_set, subset, subset_size, next_index):
-
+"""
+NIT: Please add Docstring.
+"""
     if subset_size == len(subset):
         subsets.append(list(subset))
     else:

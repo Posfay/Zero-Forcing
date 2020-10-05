@@ -9,6 +9,7 @@ import zero_forcing_process as zf
 def edge_graph():
 
     g = nx.Graph()
+    # g.add_nodes_from(range(3))
     for i in range(0, 2):
         g.add_node(i)
         g.nodes[i]['b'] = 0
@@ -22,11 +23,15 @@ def triangle_graph():
     g = nx.Graph()
     for i in range(0, 3):
         g.add_node(i)
+        # THIS IS NOT A PROPERTY OF THE GRAPH ITSELF.
+        # WE SHOULD HANDLE COLORING INDEPENDENTLY
         g.nodes[i]['b'] = 1
     g.nodes[0]['b'] = 0
-    g.add_edge(0, 1)
-    g.add_edge(1, 2)
-    g.add_edge(2, 0)
+#    g.add_edge(0, 1)
+#    g.add_edge(1, 2)
+#    g.add_edge(2, 0)
+    # PLEASE APPLY THE SAME SHORTCUT AT THE REMAINING TESTS AS WELL.
+    g.add_edges((0, 1), (1, 2), (2, 0))
     return g
 
 
