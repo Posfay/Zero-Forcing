@@ -1,9 +1,6 @@
-import pytest
 import networkx as nx
 import subset_generating
 import zero_forcing
-import graph_utils
-import zero_forcing_process as zf
 
 
 def edge_graph():
@@ -23,15 +20,10 @@ def triangle_graph():
     g = nx.Graph()
     for i in range(0, 3):
         g.add_node(i)
-        # THIS IS NOT A PROPERTY OF THE GRAPH ITSELF.
-        # WE SHOULD HANDLE COLORING INDEPENDENTLY
+        # TODO: HANDLE COLORING INDEPENDENTLY
         g.nodes[i]['b'] = 1
     g.nodes[0]['b'] = 0
-#    g.add_edge(0, 1)
-#    g.add_edge(1, 2)
-#    g.add_edge(2, 0)
-    # PLEASE APPLY THE SAME SHORTCUT AT THE REMAINING TESTS AS WELL.
-    g.add_edges((0, 1), (1, 2), (2, 0))
+    g.add_edges_from([(0, 1), (1, 2), (2, 0)])
     return g
 
 
@@ -43,11 +35,7 @@ def square_graph():
         g.nodes[i]['b'] = 0
     g.nodes[2]['b'] = 1
     g.nodes[3]['b'] = 1
-    g.add_edge(0, 1)
-    g.add_edge(1, 2)
-    g.add_edge(2, 3)
-    g.add_edge(3, 0)
-    g.add_edge(0, 2)
+    g.add_edges_from([(0, 1), (1, 2), (2, 3), (3, 0), (0, 2)])
     return g
 
 
@@ -59,12 +47,7 @@ def cycle_6_graph():
         g.nodes[i]['b'] = 0
     g.nodes[0]['b'] = 1
     g.nodes[1]['b'] = 1
-    g.add_edge(0, 1)
-    g.add_edge(1, 2)
-    g.add_edge(2, 3)
-    g.add_edge(3, 4)
-    g.add_edge(4, 5)
-    g.add_edge(5, 0)
+    g.add_edges_from([(0, 1), (1, 2), (2, 3), (3, 4), (4, 5), (5, 0)])
     return g
 
 

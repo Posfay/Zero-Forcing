@@ -7,9 +7,14 @@ subsets = list()
 
 
 def process_larger_subsets(my_set, subset, subset_size, next_index):
-"""
-NIT: Please add Docstring.
-"""
+    """
+    Recursively generate subsets from my_set.
+
+    :param my_set: list(int)
+    :param subset: list(int)
+    :param subset_size: int
+    :param next_index: int
+    """
     if subset_size == len(subset):
         subsets.append(list(subset))
     else:
@@ -20,7 +25,7 @@ NIT: Please add Docstring.
 
 def process_subsets(my_set, k):
     """
-    Generate all subsets of length k from my_set
+    Generate all subsets of length k from my_set.
     
     :param my_set: list
     :param k: int
