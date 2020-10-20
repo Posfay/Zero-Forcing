@@ -1,4 +1,5 @@
 import time
+import networkx as nx
 import zero_forcing
 import subset_generating
 import graph_utils
@@ -8,7 +9,7 @@ Generate graphs and simulate zero forcing on them.
 """
 
 
-def generate_graphs(n, seed=int(time.time())):
+def generate_initial_coloring(n, seed=int(time.time())):
     """
     Generate 1 graph with all permutations of initial black nodes.
 
@@ -16,7 +17,6 @@ def generate_graphs(n, seed=int(time.time())):
     :param seed: int
     :return: Graph
     """
-    graphs = list()
     initial_black_nodes_list = list()
 
     # generate list of initial black nodes
@@ -25,34 +25,28 @@ def generate_graphs(n, seed=int(time.time())):
         initial_black_nodes_list.extend(subs)
 
     # generate the core graph
-    core_graph = graph_utils.generate_3_regular_graph(n, seed)
-    # create the list of graphs
-    for lst in initial_black_nodes_list:
-        graph = core_graph.copy()
-        for node in lst:
-            graph.nodes[node]['b'] = 1
-        graphs.append(graph)
+    graph = nx.random_regular_graph(3, n, seed)
 
-    return graphs
+    return graph, initial_black_nodes_list
 
 
-def simulate_zero_forcing_on_graphs(graphs):
+def simulate_zero_forcing_on_graphs(graph, initial_black_nodes_list):
     """
     Simulate zero forcing on permutations of a graph and return Z(graph).
 
-    :param graphs: list(Graph)
+    :param graph: list(Graph)
     :return: int
     """
     found_zero_forcing_number = False
     zero_forcing_number = 0
-    nodes = graphs[0].number_of_nodes()
+    nodes = graph.number_of_nodes()
 
-    print(f"Graph structure: {list(graphs[0].adjacency())}")
+    print(f"Graph structure: {list(graph.adjacency())}")
 
-    for graph in graphs:
+    for lst in initial_black_nodes_list:
         g = graph.copy()
-        initial_blacks, success = zero_forcing.simulate_zero_forcing(graph)
-        print(f"{success} - {initial_blacks} - {g.nodes.data()}")
+        initial_blacks, success = zero_forcing.simulate_zero_forcing(graph, lst)
+        print(f"{success} - {initial_blacks}")
 
         if success and not found_zero_forcing_number:
             found_zero_forcing_number = True

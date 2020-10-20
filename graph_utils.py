@@ -7,22 +7,6 @@ Utility functions for graph operations
 """
 
 
-def generate_3_regular_graph(n, seed):
-    """
-    Generate a 3-regular graph with n vertices and return it.
-
-    :param n: int
-    :param seed: seed
-    :return: Graph
-    """
-    graph = nx.random_regular_graph(3, n, seed)
-    for i in list(graph.nodes):
-        graph.nodes[i]['b'] = 0
-        graph.nodes[i]['r'] = 0
-
-    return graph
-
-
 def draw_nx_graph(graph):
     """
     Visualise graph with matplotlib.

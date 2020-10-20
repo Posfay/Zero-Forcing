@@ -9,8 +9,6 @@ def edge_graph():
     # g.add_nodes_from(range(3))
     for i in range(0, 2):
         g.add_node(i)
-        g.nodes[i]['b'] = 0
-    g.nodes[0]['b'] = 1
     g.add_edge(0, 1)
     return g
 
@@ -20,9 +18,6 @@ def triangle_graph():
     g = nx.Graph()
     for i in range(0, 3):
         g.add_node(i)
-        # TODO: HANDLE COLORING INDEPENDENTLY
-        g.nodes[i]['b'] = 1
-    g.nodes[0]['b'] = 0
     g.add_edges_from([(0, 1), (1, 2), (2, 0)])
     return g
 
@@ -32,9 +27,6 @@ def square_graph():
     g = nx.Graph()
     for i in range(0, 4):
         g.add_node(i)
-        g.nodes[i]['b'] = 0
-    g.nodes[2]['b'] = 1
-    g.nodes[3]['b'] = 1
     g.add_edges_from([(0, 1), (1, 2), (2, 3), (3, 0), (0, 2)])
     return g
 
@@ -44,9 +36,6 @@ def cycle_6_graph():
     g = nx.Graph()
     for i in range(0, 6):
         g.add_node(i)
-        g.nodes[i]['b'] = 0
-    g.nodes[0]['b'] = 1
-    g.nodes[1]['b'] = 1
     g.add_edges_from([(0, 1), (1, 2), (2, 3), (3, 4), (4, 5), (5, 0)])
     return g
 
@@ -67,18 +56,12 @@ def test_simulate_zero_forcing():
     sg = square_graph()
     cg = cycle_6_graph()
 
-    assert zero_forcing.simulate_zero_forcing(eg) == (1, True)
-    assert zero_forcing.simulate_zero_forcing(tg) == (2, True)
-    assert zero_forcing.simulate_zero_forcing(sg) == (2, True)
-    assert zero_forcing.simulate_zero_forcing(cg) == (2, True)
+    assert zero_forcing.simulate_zero_forcing(eg, [0]) == (1, True)
+    assert zero_forcing.simulate_zero_forcing(tg, [1, 2]) == (2, True)
+    assert zero_forcing.simulate_zero_forcing(sg, [2, 3]) == (2, True)
+    assert zero_forcing.simulate_zero_forcing(cg, [0, 1]) == (2, True)
 
-    eg.nodes[0]['b'] = 0
-    tg.nodes[1]['b'] = 0
-    sg.nodes[3]['b'] = 0
-    sg.nodes[0]['b'] = 1
-    cg.nodes[0]['b'] = 0
-
-    assert zero_forcing.simulate_zero_forcing(eg) == (0, False)
-    assert zero_forcing.simulate_zero_forcing(tg) == (1, False)
-    assert zero_forcing.simulate_zero_forcing(sg) == (2, False)
-    assert zero_forcing.simulate_zero_forcing(cg) == (1, False)
+    assert zero_forcing.simulate_zero_forcing(eg, []) == (0, False)
+    assert zero_forcing.simulate_zero_forcing(tg, [2]) == (1, False)
+    assert zero_forcing.simulate_zero_forcing(sg, [0, 2]) == (2, False)
+    assert zero_forcing.simulate_zero_forcing(cg, [1]) == (1, False)
