@@ -11,11 +11,11 @@ Generate graphs and simulate zero forcing on them.
 
 def generate_initial_coloring(n, seed=int(time.time())):
     """
-    Generate 1 graph with all permutations of initial black nodes.
+    Generate 1 graph with n nodes and all permutations of initial black nodes.
 
     :param n: int
     :param seed: int
-    :return: Graph
+    :return: Graph, list(list(int))
     """
     initial_black_nodes_list = list()
 
@@ -24,17 +24,18 @@ def generate_initial_coloring(n, seed=int(time.time())):
         subs = subset_generating.process_subsets(list(range(0, n)), i)
         initial_black_nodes_list.extend(subs)
 
-    # generate the core graph
+    # generate the graph
     graph = nx.random_regular_graph(3, n, seed)
 
     return graph, initial_black_nodes_list
 
 
-def simulate_zero_forcing_on_graphs(graph, initial_black_nodes_list):
+def simulate_zero_forcing_on_graph(graph, initial_black_nodes_list):
     """
-    Simulate zero forcing on permutations of a graph and return Z(graph).
+    Find zero forcing number of graph.
 
-    :param graph: list(Graph)
+    :param graph: Graph
+    :param initial_black_nodes_list: list(list(int))
     :return: int
     """
     found_zero_forcing_number = False
@@ -43,11 +44,12 @@ def simulate_zero_forcing_on_graphs(graph, initial_black_nodes_list):
 
     print(f"Graph structure: {list(graph.adjacency())}")
 
+    # Simulate zero forcing on all possible initial colorings
     for lst in initial_black_nodes_list:
-        g = graph.copy()
         initial_blacks, success = zero_forcing.simulate_zero_forcing(graph, lst)
         print(f"{success} - {initial_blacks}")
 
+        # First successful simulation gives Z(graph)
         if success and not found_zero_forcing_number:
             found_zero_forcing_number = True
             zero_forcing_number = initial_blacks

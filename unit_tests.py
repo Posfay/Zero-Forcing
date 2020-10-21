@@ -6,9 +6,7 @@ import zero_forcing
 def edge_graph():
 
     g = nx.Graph()
-    # g.add_nodes_from(range(3))
-    for i in range(0, 2):
-        g.add_node(i)
+    g.add_nodes_from(range(2))
     g.add_edge(0, 1)
     return g
 
@@ -16,8 +14,7 @@ def edge_graph():
 def triangle_graph():
 
     g = nx.Graph()
-    for i in range(0, 3):
-        g.add_node(i)
+    g.add_nodes_from(range(3))
     g.add_edges_from([(0, 1), (1, 2), (2, 0)])
     return g
 
@@ -25,8 +22,7 @@ def triangle_graph():
 def square_graph():
 
     g = nx.Graph()
-    for i in range(0, 4):
-        g.add_node(i)
+    g.add_nodes_from(range(4))
     g.add_edges_from([(0, 1), (1, 2), (2, 3), (3, 0), (0, 2)])
     return g
 
@@ -34,8 +30,7 @@ def square_graph():
 def cycle_6_graph():
 
     g = nx.Graph()
-    for i in range(0, 6):
-        g.add_node(i)
+    g.add_nodes_from(range(6))
     g.add_edges_from([(0, 1), (1, 2), (2, 3), (3, 4), (4, 5), (5, 0)])
     return g
 
