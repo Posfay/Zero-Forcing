@@ -39,11 +39,8 @@ def simulate_zero_forcing_on_graph(graph, initial_black_nodes_list):
     :param initial_black_nodes_list: list(list(int))
     :return: int, list(int)
     """
-    found_zero_forcing_number = False
-    nodes = graph.number_of_nodes()
-    zero_forcing_number = 0
+    # nodes = graph.number_of_nodes()
     # Initial black nodes of minimum zero forcing set
-    initial_black_nodes_of_zf = []
 
     # print(f"Graph structure: {list(graph.adjacency())}")
 
@@ -53,12 +50,8 @@ def simulate_zero_forcing_on_graph(graph, initial_black_nodes_list):
         # print(f"{success} - {initial_blacks}")
 
         # First successful simulation gives Z(graph)
-        if success and not found_zero_forcing_number:
-            found_zero_forcing_number = True
-            zero_forcing_number = initial_blacks
-            initial_black_nodes_of_zf = lst.copy()
+        if success:
+            return initial_blacks, lst.copy()
 
     # print(f"The zero forcing number of the graph with {nodes} nodes is " +
     #       f"{zero_forcing_number}")
-
-    return zero_forcing_number, initial_black_nodes_of_zf
