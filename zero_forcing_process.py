@@ -21,8 +21,12 @@ def generate_initial_coloring(n):
         subs = subset_generating.process_subsets(list(range(0, n)), i)
         initial_black_nodes_list.extend(subs)
 
-    # generate the graph
+    # generate the graph (must be connected)
     graph = nx.random_regular_graph(3, n)
+    while True:
+        if nx.is_connected(graph):
+            break
+        graph = nx.random_regular_graph(3, n)
 
     return graph, initial_black_nodes_list
 
