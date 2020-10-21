@@ -53,10 +53,10 @@ def simulate_zero_forcing(gr, initial_black_nodes):
         else:
             # If there are still white nodes after finish, zero forcing failed
             if blacks < nodes:
-                print("Zero forcing failed")
+                # print("Zero forcing failed")
                 return initial_blacks, False
             else:
-                print(f"Zero forcing finished in {steps} step(s)")
+                # print(f"Zero forcing finished in {steps} step(s)")
                 return initial_blacks, True
 
 
