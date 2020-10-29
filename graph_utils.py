@@ -1,5 +1,8 @@
+import os
 import sys
 import datetime
+import ast
+import networkx as nx
 
 """
 Utility functions for graph operations
@@ -7,7 +10,7 @@ Utility functions for graph operations
 
 
 # Path of folder which contains "Graphs" folder
-# eg. "D:\myfiles\Zero-Forcing" -> no \ at the end
+# eg. "D:\my_files\Zero-Forcing" -> no \ at the end
 core_path = sys.argv[2]
 
 
@@ -29,3 +32,25 @@ def write_graph_to_file(graph, zero_forcing_number, initial_black_nodes):
     file.write(str(initial_black_nodes) + "\n")
 
     file.close()
+
+
+def is_isomorphic_with_any(graph, zero_forcing_number):
+
+    nodes = graph.number_of_nodes()
+    dir_path = f"\\Graphs\\{nodes}"
+    final_dir_path = core_path + dir_path
+
+    for e in os.scandir(final_dir_path):
+        if e.is_file():
+            zf = int(e.name[0])
+            if e.name[1].isnumeric():
+                zf = int(e.name[0:2])
+            if zf == zero_forcing_number:
+                file = open(e.path, "r")
+                edge_list = ast.literal_eval(file.readline())
+                g2 = nx.Graph()
+                g2.add_edges_from(edge_list)
+                if nx.is_isomorphic(graph, g2):
+                    return True
+
+    return False
