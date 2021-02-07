@@ -17,7 +17,7 @@ def generate_initial_coloring(n):
     initial_black_nodes_list = list()
 
     # generate list of initial black nodes
-    for i in range(2, int(n / 2) + 2):
+    for i in range(int(n / 3), int(n / 2) + 2):
         subs = subset_generating.process_subsets(list(range(0, n)), i)
         initial_black_nodes_list.extend(subs)
 
