@@ -9,26 +9,36 @@ Generate graphs and simulate zero forcing on them.
 
 def generate_initial_coloring(n):
     """
-    Generate 1 graph with n nodes and all permutations of initial black nodes.
+    Generate all permutations of initial black nodes.
 
     :param n: int
-    :return: Graph, list(list(int))
+    :return: list(list(int))
     """
     initial_black_nodes_list = list()
 
     # generate list of initial black nodes
-    for i in range(int(n / 3), int(n / 2) + 2):
+    for i in range(int(n / 3), int(n / 2) + 1):
         subs = subset_generating.process_subsets(list(range(0, n)), i)
         initial_black_nodes_list.extend(subs)
 
-    # generate the graph (must be connected)
+    return initial_black_nodes_list
+
+
+def generate_graph(n):
+    """
+    Generating a connected 3 regular graph
+
+    :param n: int
+    :return: Graph
+    """
     graph = nx.random_regular_graph(3, n)
     while True:
+        # must be connected
         if nx.is_connected(graph):
             break
         graph = nx.random_regular_graph(3, n)
 
-    return graph, initial_black_nodes_list
+    return graph
 
 
 def simulate_zero_forcing_on_graph(graph, initial_black_nodes_list):

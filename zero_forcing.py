@@ -47,8 +47,7 @@ def simulate_zero_forcing(gr, initial_black_nodes):
             last_blacks = blacks
             steps += 1
             # Simulate next iteration
-            new_blacks, colors, active_black_nodes, white_neighbors = simulate_one_step(
-                graph, colors, active_black_nodes, white_neighbors)
+            new_blacks = simulate_one_step(graph, colors, active_black_nodes, white_neighbors)
             blacks += new_blacks
         else:
             # If there are still white nodes after finish, zero forcing failed
@@ -94,4 +93,4 @@ def simulate_one_step(graph, colors, active_black_nodes, white_neighbors):
                         active_black_nodes.append(active_black_nb)
                     break
 
-    return new_blacks, colors.copy(), active_black_nodes.copy(), white_neighbors.copy()
+    return new_blacks
