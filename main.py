@@ -27,13 +27,12 @@ total = 0
 success = 0
 one_min_total = 0
 start_time = time.time()
-initial_black_nodes_list = zf.generate_initial_coloring(nodes)
 
 while True:
     total += 1
 
     graph = zf.generate_graph(nodes)
-    zf_number, init_black_nodes_successful = zf.simulate_zero_forcing_on_graph(graph, initial_black_nodes_list)
+    zf_number, init_black_nodes_successful = zf.simulate_zero_forcing_on_graph(graph)
     if ((zf_number / nodes) > (1/3)) and (not graph_utils.is_isomorphic_with_any(graph, zf_number)):
         graph_utils.write_graph_to_file(graph, zf_number, init_black_nodes_successful)
         success += 1

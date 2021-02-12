@@ -90,12 +90,11 @@ def write_es_graph_to_file(graph, zero_forcing_number, initial_black_nodes, path
 def simulate_zf(graphs, n):
 
     path = "H:\\Data\\Zero Forcing\\Edge Split Results\\Test"
-    initial_black_nodes_list = zf.generate_initial_coloring(n)
 
     c = 0
     o = len(graphs)
     for graph in graphs:
-        zf_number, init_black_nodes_successful = zf.simulate_zero_forcing_on_graph(graph, initial_black_nodes_list)
+        zf_number, init_black_nodes_successful = zf.simulate_zero_forcing_on_graph(graph)
         write_es_graph_to_file(graph, zf_number, init_black_nodes_successful, path)
         c += 1
         print(f"{c}/{o}. done")

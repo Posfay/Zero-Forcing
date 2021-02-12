@@ -60,3 +60,24 @@ def test_simulate_zero_forcing():
     assert zero_forcing.simulate_zero_forcing(tg, [2]) == (1, False)
     assert zero_forcing.simulate_zero_forcing(sg, [0, 2]) == (2, False)
     assert zero_forcing.simulate_zero_forcing(cg, [1]) == (1, False)
+
+
+def subs(s, n):
+    subset_generating.next_subset(s, n)
+    return s
+
+
+def test_next_subset():
+
+    assert subs([-1], 3) == [0]
+    assert subs([2], 4) == [3]
+    assert subs([3], 4) == [0, 1]
+    assert subs([0, 1], 4) == [0, 2]
+    assert subs([1, 2], 4) == [1, 3]
+    assert subs([0, 3], 4) == [1, 2]
+    assert subs([2, 3], 4) == [0, 1, 2]
+    assert subs([0, 2, 3], 4) == [1, 2, 3]
+    assert subs([1, 2, 3], 4) == [0, 1, 2, 3]
+    assert subs([1, 5, 6], 7) == [2, 3, 4]
+    assert subs([20, 30, 39], 500) == [20, 30, 40]
+    assert subs([20, 30, 499], 500) == [20, 31, 32]

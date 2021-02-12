@@ -16,8 +16,8 @@ def generate_initial_coloring(n):
     """
     initial_black_nodes_list = list()
 
-    # generate list of initial black nodes
-    for i in range(int(n / 3), int(n / 2) + 1):
+    # Generate list of initial black nodes
+    for i in range(int(n / 3), int(n / 2) + 2):
         subs = subset_generating.process_subsets(list(range(0, n)), i)
         initial_black_nodes_list.extend(subs)
 
@@ -41,18 +41,28 @@ def generate_graph(n):
     return graph
 
 
-def simulate_zero_forcing_on_graph(graph, initial_black_nodes_list):
+def simulate_zero_forcing_on_graph(graph):
     """
     Find zero forcing number of graph.
 
     :param graph: Graph
-    :param initial_black_nodes_list: list(list(int))
     :return: int, list(int)
     """
-    # Simulate zero forcing on all possible initial colorings
-    for lst in initial_black_nodes_list:
-        initial_blacks, success = zero_forcing.simulate_zero_forcing(graph, lst)
+    # Initialising the starting black node list for the next_subset generator
+    nodes = graph.number_of_nodes()
+    n = int(nodes / 3)
+    subs = list(range(0, n))
+    subs[n-1] -= 1
+
+    # Simulate zero forcing on all *feasible* initial colorings
+    while True:
+        subset_generating.next_subset(subs, nodes)
+        # This should never be true
+        if len(subs) >= int(nodes / 2) + 2:
+            return -1, []
+
+        zero_forcing_number, success = zero_forcing.simulate_zero_forcing(graph, subs)
 
         # First successful simulation gives Z(graph)
         if success:
-            return initial_blacks, lst.copy()
+            return zero_forcing_number, subs.copy()

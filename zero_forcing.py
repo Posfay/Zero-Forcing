@@ -20,12 +20,14 @@ def simulate_zero_forcing(gr, initial_black_nodes):
 
     # Number of white neighbors a given node has
     white_neighbors = []
+
     # The color of a given node (0: white, 1: black)
     colors = []
+
     # List of active black nodes (those that have at least 1 white neighbor)
     active_black_nodes = []
 
-    # initialisation of lists
+    # Initialisation of lists
     for i in range(nodes):
         colors.append(0)
         white_neighbors.append(graph.degree(i))
@@ -52,9 +54,11 @@ def simulate_zero_forcing(gr, initial_black_nodes):
         else:
             # If there are still white nodes after finish, zero forcing failed
             if blacks < nodes:
+                del graph
                 # print("Zero forcing failed")
                 return initial_blacks, False
             else:
+                del graph
                 # print(f"Zero forcing finished in {steps} step(s)")
                 return initial_blacks, True
 
@@ -71,8 +75,10 @@ def simulate_one_step(graph, colors, active_black_nodes, white_neighbors):
     """
     new_blacks = 0
 
+    ab = active_black_nodes.copy()
+
     # Iterate over active black nodes (copy to avoid skipping elements)
-    for active_black in active_black_nodes.copy():
+    for active_black in ab:
         # If a black node has only 1 white neighbor
         if white_neighbors[active_black] == 1:
             # Find the white among its neighbors
@@ -92,5 +98,7 @@ def simulate_one_step(graph, colors, active_black_nodes, white_neighbors):
                     if white_neighbors[active_black_nb] > 0:
                         active_black_nodes.append(active_black_nb)
                     break
+
+    del ab
 
     return new_blacks
