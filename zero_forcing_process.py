@@ -53,9 +53,14 @@ def simulate_zero_forcing_on_graph(graph):
     n = int(nodes / 3)
     subs = list(range(0, n))
     subs[n-1] -= 1
+    t = 0
 
     # Simulate zero forcing on all *feasible* initial colorings
     while True:
+        t += 1
+        if t % 500000 == 0:
+            print(f"{t} processed")
+
         subset_generating.next_subset(subs, nodes)
         # This should never be true
         if len(subs) >= int(nodes / 2) + 2:
