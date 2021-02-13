@@ -1,9 +1,9 @@
+import os
 import ast
-import datetime
 import networkx as nx
 import tkinter as tk
 from tkinter import filedialog
-import subset_generating
+import graph_utils
 import zero_forcing_process as zf
 
 
@@ -58,58 +58,45 @@ def edge_split(edge_list1, edge_list2):
                     break
             if not isomorph:
                 new_graphs.append(new_graph)
-                print(f"{c}/{o}. added")
+                # print(f"{c}/{o}. added")
             else:
-                print(f"{c}/{o}. excluded")
+                pass
+                # print(f"{c}/{o}. excluded")
 
-    print("finished edge splitting")
+    # print("finished edge splitting")
     return new_graphs
 
 
-# Used for edge split creations
-def write_es_graph_to_file(graph, zero_forcing_number, initial_black_nodes, path):
+def simulate_zf(graphs, n, origin_graph1_path, origin_graph2_path):
 
-    nodes = graph.number_of_nodes()
-    file_path = f"{path}\\{zero_forcing_number}_zf_{nodes}_nodes_"
-    t = datetime.datetime.now()
-    time_stamp = f"{t.strftime('%Y')}-{t.strftime('%m')}-" \
-                 f"{t.strftime('%d')}_{t.strftime('%H')}-" \
-                 f"{t.strftime('%M')}-{t.strftime('%S')}." \
-                 f"{t.strftime('%f')}"
-    extension = ".txt"
-    final_file_path = file_path + time_stamp + extension
+    dir_path = f"{origin_graph1_path[:-4]} - {origin_graph2_path[:-4]}"
+    path = f"c:\\Users\\bened\\Documents\\Zero Forcing\\Edge Split Results\\{n}\\{dir_path}"
 
-    file = open(final_file_path, "w")
-
-    file.write(str(list(graph.edges)) + "\n")
-    file.write(str(initial_black_nodes) + "\n")
-
-    file.close()
-
-
-def simulate_zf(graphs, n):
-
-    path = "H:\\Data\\Zero Forcing\\Edge Split Results\\Test"
-
-    c = 0
+    d = 0
     o = len(graphs)
     for graph in graphs:
         zf_number, init_black_nodes_successful = zf.simulate_zero_forcing_on_graph(graph)
-        write_es_graph_to_file(graph, zf_number, init_black_nodes_successful, path)
-        c += 1
-        print(f"{c}/{o}. done")
+        graph_utils.write_graph_to_file(graph, zf_number, init_black_nodes_successful, path)
+        d += 1
+        print(f"   {d}/{o}. done")
 
 
 root = tk.Tk()
 root.withdraw()
 
 files = filedialog.askopenfilenames()
-graph_file1 = open(files[0], "r")
-edges1 = ast.literal_eval(graph_file1.readline())
-nodes1 = int(len(edges1) * 2/3)
-graph_file2 = open(files[1], "r")
-edges2 = ast.literal_eval(graph_file2.readline())
-nodes2 = int(len(edges2) * 2/3)
+print(f"Selected {len(files)} graphs")
 
-created_graphs = edge_split(edges1, edges2)
-simulate_zf(created_graphs, nodes1 + nodes2 + 2)
+c = 0
+for file in files:
+    graph_file = open(file, "r")
+    filename = os.path.basename(graph_file.name)
+    edges = ast.literal_eval(graph_file.readline())
+    n = int(len(edges) * 2 / 3)
+
+    created_graphs = edge_split(edges, edges.copy())
+    print(f"   {len(created_graphs)} graphs created")
+    simulate_zf(created_graphs, (2 * n) + 2, filename, filename)
+
+    c += 1
+    print(f"{c}/{len(files)} finished")

@@ -9,15 +9,18 @@ Utility functions for graph operations
 """
 
 
-# Path of folder which contains "Graphs" folder
-# eg. "D:\my_files\Zero-Forcing" -> no \ at the end
-core_path = sys.argv[2]
-
-
-def write_graph_to_file(graph, zero_forcing_number, initial_black_nodes):
+def write_graph_to_file(graph, zero_forcing_number, initial_black_nodes, core_path):
 
     nodes = graph.number_of_nodes()
-    file_path = f"\\Graphs\\{nodes}\\{zero_forcing_number}_zf_{nodes}_nodes_"
+
+    try:
+        # Create dir for graph
+        os.makedirs(core_path)
+    except:
+        # If dir exists already, skip
+        pass
+
+    file_path = f"\\{zero_forcing_number}_zf_{nodes}_nodes_"
     t = datetime.datetime.now()
     time_stamp = f"{t.strftime('%Y')}-{t.strftime('%m')}-" \
                  f"{t.strftime('%d')}_{t.strftime('%H')}-" \
@@ -34,10 +37,10 @@ def write_graph_to_file(graph, zero_forcing_number, initial_black_nodes):
     file.close()
 
 
-def is_isomorphic_with_any(graph, zero_forcing_number):
+def is_isomorphic_with_any(graph, zero_forcing_number, core_path):
 
     nodes = graph.number_of_nodes()
-    dir_path = f"\\Graphs\\{nodes}"
+    dir_path = f"\\{nodes}"
     final_dir_path = core_path + dir_path
 
     for e in os.scandir(final_dir_path):

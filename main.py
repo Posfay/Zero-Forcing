@@ -22,6 +22,9 @@ def print_results():
     print(f"{'Save speed:' : <16}{round(saved_per_hour) : <7} graphs/h")
 
 
+# Path of folder which will contain the generated graphs
+# eg. "D:\my_files\Zero-Forcing\Graphs" -> no \ at the end
+core_path = sys.argv[2]
 nodes = int(sys.argv[1])
 total = 0
 success = 0
@@ -33,8 +36,8 @@ while True:
 
     graph = zf.generate_graph(nodes)
     zf_number, init_black_nodes_successful = zf.simulate_zero_forcing_on_graph(graph)
-    if ((zf_number / nodes) > (1/3)) and (not graph_utils.is_isomorphic_with_any(graph, zf_number)):
-        graph_utils.write_graph_to_file(graph, zf_number, init_black_nodes_successful)
+    if ((zf_number / nodes) > (1/3)) and (not graph_utils.is_isomorphic_with_any(graph, zf_number, core_path)):
+        graph_utils.write_graph_to_file(graph, zf_number, init_black_nodes_successful, core_path + f"\\{nodes}")
         success += 1
 
     if nodes <= 12:

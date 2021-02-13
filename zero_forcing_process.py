@@ -59,7 +59,8 @@ def simulate_zero_forcing_on_graph(graph):
     while True:
         t += 1
         if t % 500000 == 0:
-            print(f"{t} processed")
+            pass
+            # print(f"{t} processed")
 
         subset_generating.next_subset(subs, nodes)
         # This should never be true
