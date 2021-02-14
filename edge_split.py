@@ -1,3 +1,4 @@
+import datetime
 import os
 import ast
 import networkx as nx
@@ -75,28 +76,35 @@ def simulate_zf(graphs, n, origin_graph1_path, origin_graph2_path):
     d = 0
     o = len(graphs)
     for graph in graphs:
+        t1 = datetime.datetime.now()
         zf_number, init_black_nodes_successful = zf.simulate_zero_forcing_on_graph(graph)
         graph_utils.write_graph_to_file(graph, zf_number, init_black_nodes_successful, path)
+
         d += 1
-        print(f"   {d}/{o}. done")
+        t2 = datetime.datetime.now()
+        print(f"{graph_utils.timestamp()}    {d}/{o}. (n={n}) done in {graph_utils.time_diff(t1, t2)}")
 
 
 root = tk.Tk()
 root.withdraw()
 
 files = filedialog.askopenfilenames()
-print(f"Selected {len(files)} graphs")
+print(f"{graph_utils.timestamp()} Selected {len(files)} graphs")
 
 c = 0
 for file in files:
+    tt1 = datetime.datetime.now()
     graph_file = open(file, "r")
     filename = os.path.basename(graph_file.name)
     edges = ast.literal_eval(graph_file.readline())
     n = int(len(edges) * 2 / 3)
 
+    t1 = datetime.datetime.now()
     created_graphs = edge_split(edges, edges.copy())
-    print(f"   {len(created_graphs)} graphs created")
+    t2 = datetime.datetime.now()
+    print(f"{graph_utils.timestamp()}    {len(created_graphs)} graphs created in {graph_utils.time_diff(t1, t2)}")
     simulate_zf(created_graphs, (2 * n) + 2, filename, filename)
 
     c += 1
-    print(f"{c}/{len(files)} finished")
+    tt2 = datetime.datetime.now()
+    print(f"{graph_utils.timestamp()} {c}/{len(files)} finished in {graph_utils.time_diff(tt1, tt2)}")
