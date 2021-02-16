@@ -6,7 +6,9 @@ import graph_utils
 
 
 def print_results():
-
+    """
+    Printing statistics about generation speed, performance, etc.
+    """
     now_time = time.time()
     diff_time_in_sec = now_time - start_time
     generated_per_second = total / diff_time_in_sec

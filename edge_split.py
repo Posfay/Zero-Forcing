@@ -68,17 +68,25 @@ def edge_split(edge_list1, edge_list2):
     return new_graphs
 
 
-def simulate_zf(graphs, n, origin_graph1_path, origin_graph2_path):
+def simulate_zf(graphs, n, origin_graph1_path, origin_graph2_path, results_core_path):
+    """
+    Simulates zero forcing on the resulting graphs of edge splitting and saves the graphs
 
+    :param graphs: list(Graph)
+    :param n: int
+    :param origin_graph1_path: str
+    :param origin_graph2_path: str
+    :param results_core_path:  str
+    """
     dir_path = f"{origin_graph1_path[:-4]} - {origin_graph2_path[:-4]}"
-    path = f"c:\\Users\\bened\\Documents\\Zero Forcing\\Edge Split Results\\{n}\\{dir_path}"
+    final_path = f"{results_core_path}\\{n}\\{dir_path}"
 
     d = 0
     o = len(graphs)
     for graph in graphs:
         t1 = datetime.datetime.now()
         zf_number, init_black_nodes_successful = zf.simulate_zero_forcing_on_graph(graph)
-        graph_utils.write_graph_to_file(graph, zf_number, init_black_nodes_successful, path)
+        graph_utils.write_graph_to_file(graph, zf_number, init_black_nodes_successful, final_path)
 
         d += 1
         t2 = datetime.datetime.now()
@@ -88,6 +96,10 @@ def simulate_zf(graphs, n, origin_graph1_path, origin_graph2_path):
 root = tk.Tk()
 root.withdraw()
 
+# Asking for save directory
+results_dir_path = filedialog.askdirectory()
+
+# Asking for graphs to simulate edge splitting on
 files = filedialog.askopenfilenames()
 print(f"{graph_utils.timestamp()} Selected {len(files)} graphs")
 
@@ -103,7 +115,7 @@ for file in files:
     created_graphs = edge_split(edges, edges.copy())
     t2 = datetime.datetime.now()
     print(f"{graph_utils.timestamp()}    {len(created_graphs)} graphs created in {graph_utils.time_diff(t1, t2)}")
-    simulate_zf(created_graphs, (2 * n) + 2, filename, filename)
+    simulate_zf(created_graphs, (2 * n) + 2, filename, filename, results_dir_path)
 
     c += 1
     tt2 = datetime.datetime.now()

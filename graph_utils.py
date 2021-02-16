@@ -10,7 +10,14 @@ Utility functions for graph operations
 
 
 def write_graph_to_file(graph, zero_forcing_number, initial_black_nodes, core_path):
+    """
+    Saving edge list and zero forcing initial nodes list
 
+    :param graph: Graph
+    :param zero_forcing_number: int
+    :param initial_black_nodes: list(int)
+    :param core_path: str
+    """
     nodes = graph.number_of_nodes()
 
     try:
@@ -35,15 +42,25 @@ def write_graph_to_file(graph, zero_forcing_number, initial_black_nodes, core_pa
 
 
 def is_isomorphic_with_any(graph, zero_forcing_number, core_path):
+    """
+    Checking whether graph is isomorphic with any already generated ones
 
+    :param graph: Graph
+    :param zero_forcing_number: int
+    :param core_path: str
+    :return: bool
+    """
     nodes = graph.number_of_nodes()
     dir_path = f"\\{nodes}"
     final_dir_path = core_path + dir_path
 
     for e in os.scandir(final_dir_path):
+        # Found a graph
         if e.is_file():
+            # Getting zero forcing number
             zf = int(e.name[0])
             if e.name[1].isnumeric():
+                # If zero forcing number is 2 digits
                 zf = int(e.name[0:2])
             if zf == zero_forcing_number:
                 file = open(e.path, "r")
@@ -57,13 +74,23 @@ def is_isomorphic_with_any(graph, zero_forcing_number, core_path):
 
 
 def timestamp():
+    """
+    Creating a human-friendly timestamp
 
+    :return: str
+    """
     t = datetime.datetime.now()
     return f"[{t.strftime('%d/%m - %H:%M:%S')}]"
 
 
 def time_diff(t1, t2):
+    """
+    Calculating the difference in time between two datetime objects
 
+    :param t1: datetime
+    :param t2: datetime
+    :return: str
+    """
     diff = t2 - t1
     sec = diff.total_seconds()
     one_day = 60 * 60 * 24
@@ -72,14 +99,14 @@ def time_diff(t1, t2):
     if sec >= one_day:
         d = sec // one_day
         h = (sec % one_day) // one_hour
-        return f"{d}d {h}h"
+        return f"{round(d)}d {round(h)}h"
     elif sec >= one_hour:
         h = sec // one_hour
         m = (sec % one_hour) // one_minute
-        return f"{h}h {m}m"
+        return f"{round(h)}h {round(m)}m"
     elif sec >= one_minute:
         m = sec // one_minute
         s = sec % one_minute
-        return f"{m}m {s}s"
+        return f"{round(m)}m {round(s)}s"
     else:
         return f"{sec}s"

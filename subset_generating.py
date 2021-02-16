@@ -47,6 +47,7 @@ def next_subset(subset, n):
     l = len(subset)
     if subset[l-1] == n - 1:
         if l == 1:
+            # {4} -> {0,1}
             subset[0] = 0
             subset.append(1)
             return
@@ -62,5 +63,6 @@ def next_subset(subset, n):
                 subset[i] = i
             return
     else:
+        # {0,1,2} -> {0,1,3}
         subset[l-1] += 1
         return
