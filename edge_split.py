@@ -122,3 +122,5 @@ for file in files:
     c += 1
     tt2 = datetime.datetime.now()
     print(f"{graph_utils.timestamp()} {c}/{len(files)} finished in {graph_utils.time_diff(tt1, tt2)}")
+
+input()
