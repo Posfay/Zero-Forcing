@@ -90,7 +90,9 @@ def simulate_zf(graphs, n, origin_graph1_path, origin_graph2_path, results_core_
 
         d += 1
         t2 = datetime.datetime.now()
-        print(f"{graph_utils.timestamp()}    {d}/{o}. (n={n}) done in {graph_utils.time_diff(t1, t2)}")
+        print(f"{graph_utils.timestamp()}    {d}/{o}."
+              f" (n={n}, zf={zf_number}, ratio={round(zf_number/n, 2)})"
+              f" done in {graph_utils.time_diff(t1, t2)}")
 
 
 root = tk.Tk()
