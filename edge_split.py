@@ -1,9 +1,5 @@
 import datetime
-import os
-import ast
 import networkx as nx
-import tkinter as tk
-from tkinter import filedialog
 import graph_utils
 import zero_forcing_process as zf
 
@@ -93,34 +89,3 @@ def simulate_zf(graphs, n, origin_graph1_path, origin_graph2_path, results_core_
         print(f"{graph_utils.timestamp()}    {d}/{o}."
               f" (n={n}, zf={zf_number}, ratio={round(zf_number/n, 2)})"
               f" done in {graph_utils.time_diff(t1, t2)}")
-
-
-root = tk.Tk()
-root.withdraw()
-
-# Asking for save directory
-results_dir_path = filedialog.askdirectory()
-
-# Asking for graphs to simulate edge splitting on
-files = filedialog.askopenfilenames()
-print(f"{graph_utils.timestamp()} Selected {len(files)} graphs")
-
-c = 0
-for file in files:
-    tt1 = datetime.datetime.now()
-    graph_file = open(file, "r")
-    filename = os.path.basename(graph_file.name)
-    edges = ast.literal_eval(graph_file.readline())
-    n = int(len(edges) * 2 / 3)
-
-    t1 = datetime.datetime.now()
-    created_graphs = edge_split(edges, edges.copy())
-    t2 = datetime.datetime.now()
-    print(f"{graph_utils.timestamp()}    {len(created_graphs)} graphs created in {graph_utils.time_diff(t1, t2)}")
-    simulate_zf(created_graphs, (2 * n) + 2, filename, filename, results_dir_path)
-
-    c += 1
-    tt2 = datetime.datetime.now()
-    print(f"{graph_utils.timestamp()} {c}/{len(files)} finished in {graph_utils.time_diff(tt1, tt2)}")
-
-input()
