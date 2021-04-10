@@ -67,13 +67,11 @@ def edge_split_other():
 
 
 def select_dir():
-
     # Asking for save directory
     return filedialog.askdirectory()
 
 
 def select_files_itself():
-
     # Asking for graphs to simulate edge splitting on
     files = filedialog.askopenfilenames()
     print(f"{graph_utils.timestamp()} Selected {len(files)} graphs")
