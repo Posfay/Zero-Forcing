@@ -41,6 +41,40 @@ def write_graph_to_file(graph, zero_forcing_number, initial_black_nodes, core_pa
     file.close()
 
 
+def write_pendant_graph_to_file(graph, zero_forcing_number, initial_black_nodes, pendant_edge, core_path):
+    """
+    Saving edge list and zero forcing initial nodes list plus the original edge where the pendant was injected
+
+    :param graph: Graph
+    :param zero_forcing_number: int
+    :param initial_black_nodes: list(int)
+    :param pendant_edge: list(int) (node1, node2)
+    :param core_path: str
+    """
+    nodes = graph.number_of_nodes()
+
+    try:
+        # Create dir for graph
+        os.makedirs(core_path)
+    except:
+        # If dir exists already, skip
+        pass
+
+    file_path = f"\\{zero_forcing_number}_zf_{nodes}_nodes_"
+    t = datetime.datetime.now()
+    time_stamp = f"{t.strftime('%Y-%m-%d_%H-%M-%S.%f')}"
+    extension = ".txt"
+    final_file_path = core_path + file_path + time_stamp + extension
+
+    file = open(final_file_path, "w")
+
+    file.write(str(list(graph.edges)) + "\n")
+    file.write(str(initial_black_nodes) + "\n")
+    file.write(str(pendant_edge) + "\n")
+
+    file.close()
+
+
 def is_isomorphic_with_any(graph, zero_forcing_number, core_path):
     """
     Checking whether graph is isomorphic with any already generated ones

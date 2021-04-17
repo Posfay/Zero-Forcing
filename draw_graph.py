@@ -24,5 +24,5 @@ for i in graph:
     else:
         color_map.append("grey")
 
-nx.draw_shell(graph, node_color=color_map, with_labels=True)
+nx.draw(graph, node_color=color_map, with_labels=True)
 plt.show()

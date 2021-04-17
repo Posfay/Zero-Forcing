@@ -15,7 +15,7 @@ def inject_pendant_to_edge(edge_list, edge):
     """
     orig_n = int(len(edge_list) * 2 / 3)
 
-    # Creating pendant with a subdivided edge
+    # Creating a pendant
     pendant_gr = nx.complete_graph(range(orig_n, orig_n + 4))
     pendant_gr.remove_edge(orig_n, orig_n + 1)
     new_pendant_edges = [(orig_n, orig_n + 4), (orig_n + 4, orig_n + 1)]
@@ -82,7 +82,13 @@ def simulate_zf(graphs, n, zfn, origin_graph_path, results_core_path):
     for graph in graphs:
         t1 = datetime.datetime.now()
         zf_number, init_black_nodes_successful = zf.simulate_zero_forcing_on_graph(graph)
-        graph_utils.write_graph_to_file(graph, zf_number, init_black_nodes_successful, final_path)
+
+        connecting_node = n - 1
+        neighbors = [n for n in graph.neighbors(connecting_node)]
+        neighbors.remove(max(neighbors))
+        pendant_edge = tuple(neighbors)
+
+        graph_utils.write_pendant_graph_to_file(graph, zf_number, init_black_nodes_successful, pendant_edge, final_path)
 
         if zf_number > max_zfn:
             max_zfn = zf_number
@@ -107,6 +113,7 @@ def simulate_zf(graphs, n, zfn, origin_graph_path, results_core_path):
         save_stats(results_core_path, original_graphs_reached_ratio=1)
 
     save_stats(results_core_path, original_graphs_processed=1)
+    save_processed_graph(results_core_path, origin_graph_path)
 
 
 def save_stats(results_core_path, original_graphs_processed=0,
@@ -137,6 +144,26 @@ def save_stats(results_core_path, original_graphs_processed=0,
     stats_file.write(f"{str(original_graphs_reached_ratio)}\n")
     stats_file.write(f"{str(new_graphs_reached_ratio)}\n")
     stats_file.close()
+
+
+def save_processed_graph(results_core_path, original_graph_name):
+    """
+    Saves original graphs that have already been processed
+
+    :param results_core_path: str
+    :param original_graph_name: str
+    """
+    processed_dir_path = f"{results_core_path}\\Processed Graphs"
+
+    try:
+        os.makedirs(processed_dir_path)
+    except:
+        pass
+
+    processed_graph_path = f"{processed_dir_path}\\{original_graph_name}"
+    processed_graph_file = open(processed_graph_path, "w")
+    processed_graph_file.write(" ")
+    processed_graph_file.close()
 
 
 def save_reached_ratio(results_core_path, reached_graph_name, orig_zf_ratio, new_zf_ratio):
